@@ -27,6 +27,8 @@ app_license = "mit"
 # include js, css files in header of desk.html
 # app_include_css = "/assets/scrollable_table/css/scrollable_table.css"
 # app_include_js = "/assets/scrollable_table/js/scrollable_table.js"
+app_include_css = ["updated_gridview.bundle.css"]
+app_include_js = ["updated_gridview.bundle.js"]
 
 # include js, css files in header of web template
 # web_include_css = "/assets/scrollable_table/css/scrollable_table.css"
