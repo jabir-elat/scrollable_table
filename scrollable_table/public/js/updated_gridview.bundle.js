@@ -17,16 +17,16 @@ class Custom_GridRow extends GridRow {
 		// }
 	}
 
-	show_form() {
-		super.show_form()
+	// show_form() {
+	// 	super.show_form()
 
-		$(this.grid.form_grid).removeClass("relative-important");
-	}
-	hide_form() {
-		super.hide_form()
+	// 	$(this.grid.form_grid).removeClass("relative-important");
+	// }
+	// hide_form() {
+	// 	super.hide_form()
 
-		$(this.grid.form_grid).addClass("relative-important");
-	}
+	// 	$(this.grid.form_grid).addClass("relative-important");
+	// }
 }
 
 
@@ -39,7 +39,7 @@ class Custom_Grid extends Grid {
 				<span class="help"></span>
 				<p class="text-muted small grid-description"></p>
 				<div class="grid-custom-buttons"></div>
-				<div class="form-grid-container enhanced-grid-container">
+				<div class="form-grid-container">
 					<div class="form-grid">
 						<div class="grid-heading-row"></div>
 						<div class="grid-body">
@@ -54,7 +54,6 @@ class Custom_Grid extends Grid {
 							</div>
 						</div>
 					</div>
-					<input type="range" min="1" max="100" value="1" class="enhanced-slider">
 				</div>
 				<div class="small form-clickable-section grid-footer">
 					<div class="flex justify-between">
@@ -101,15 +100,16 @@ class Custom_Grid extends Grid {
 
 
 		// enhance slider changes
-		this.form_grid.addClass("relative-important");
+		// this.form_grid.addClass("relative-important");
 		this.form_grid_container = this.wrapper.find(".form-grid-container");
-		this.enhanced_slider = this.wrapper.find(".enhanced-slider");
+		// this.enhanced_slider = this.wrapper.find(".enhanced-slider");
+		// this.enhanced_slider.css("display", "none");
 		let me = this
-		this.enhanced_slider.on("input", function (event) {
-			const value = event.target.value;
-			me.form_grid.css("left", `-${value}px`)
-			me.setup_scrollable_width()
-		})
+		// this.enhanced_slider.on("input", function (event) {
+		// 	const value = event.target.value;
+		// 	me.form_grid.css("left", `-${value}px`)
+		// 	me.setup_scrollable_width()
+		// })
 
 
 
@@ -300,15 +300,15 @@ class Custom_Grid extends Grid {
 		this.visible_columns.forEach(column => {
 			width += column[1] * 50 + 100
 		});
-		if (width > this.form_grid_container[0].clientWidth) {
-			this.enhanced_slider.prop("max", width - this.form_grid_container[0].clientWidth)
-			this.enhanced_slider.prop("style", "display:block")
-		} else {
-			this.form_grid.css("left", `0px`)
-			this.enhanced_slider.prop("max", this.form_grid_container[0].clientWidth)
-			this.enhanced_slider.prop("style", "display:none")
-			this.enhanced_slider.prop("value", 0)
-		}
+		// if (width > this.form_grid_container[0].clientWidth) {
+		// 	this.enhanced_slider.prop("max", width - this.form_grid_container[0].clientWidth)
+		// 	this.enhanced_slider.prop("style", "display:block")
+		// } else {
+		// 	this.form_grid.css("left", `0px`)
+		// 	this.enhanced_slider.prop("max", this.form_grid_container[0].clientWidth)
+		// 	this.enhanced_slider.prop("style", "display:none")
+		// 	this.enhanced_slider.prop("value", 0)
+		// }
 	}
 
 	verify_overflow_columns_width() {
@@ -317,13 +317,13 @@ class Custom_Grid extends Grid {
 			width += column[1] * 50 + 100
 		});
 
-		if (width > this.form_grid_container[0].clientWidth) {
-			this.form_grid_container.addClass('enhanced-grid-container')
-			this.enhanced_slider.prop("style", "display:block")
-		} else {
-			this.enhanced_slider.prop("style", "display:none")
-			this.enhanced_slider.prop("value", 0)
-		}
+		// if (width > this.form_grid_container[0].clientWidth) {
+		// 	this.form_grid_container.addClass('enhanced-grid-container')
+		// 	this.enhanced_slider.prop("style", "display:block")
+		// } else {
+		// 	this.enhanced_slider.prop("style", "display:none")
+		// 	this.enhanced_slider.prop("value", 0)
+		// }
 	}
 
 }

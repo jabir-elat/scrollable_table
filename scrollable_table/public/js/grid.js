@@ -71,13 +71,11 @@ export default class Grid {
 						<div class="grid-heading-row"></div>
 						<div class="grid-body">
 							<div class="rows"></div>
-							<div class="grid-empty text-center">
-								<img
-									src="/assets/frappe/images/ui-states/grid-empty-state.svg"
-									alt="Grid Empty State"
-									class="grid-empty-illustration"
-								>
-								${__("No Data")}
+							<div class="grid-empty text-center text-extra-muted">
+								${__("No rows")}
+							</div>
+							<div class="grid-scroll-bar">
+								<div class="grid-scroll-bar-rows"></div>
 							</div>
 						</div>
 					</div>
@@ -144,7 +142,7 @@ export default class Grid {
 	set_grid_description() {
 		let description_wrapper = $(this.parent).find(".grid-description");
 		if (this.df.description) {
-			description_wrapper.text(__(this.df.description));
+			description_wrapper.html(__(this.df.description));
 		} else {
 			description_wrapper.hide();
 		}
@@ -236,7 +234,7 @@ export default class Grid {
 					this.df.data = this.get_data();
 					this.df.data = this.df.data.filter((row) => row.idx != doc.idx);
 				}
-				this.grid_rows_by_docname[doc.name].remove();
+				this.grid_rows_by_docname[doc.name]?.remove();
 				dirty = true;
 			});
 			tasks.push(() => frappe.timeout(0.1));
@@ -310,6 +308,11 @@ export default class Grid {
 		this.remove_all_rows_button.toggleClass("hidden", !show_delete_all_btn);
 	}
 
+	debounced_refresh_remove_rows_button = frappe.utils.debounce(
+		this.refresh_remove_rows_button,
+		100
+	);
+
 	get_selected() {
 		return (this.grid_rows || [])
 			.map((row) => {
@@ -321,9 +324,9 @@ export default class Grid {
 	}
 
 	get_selected_children() {
-		return (this.grid_rows || [])
+		return (this.data || [])
 			.map((row) => {
-				return row.doc.__checked ? row.doc : null;
+				return row.__checked ? row : 0;
 			})
 			.filter((d) => {
 				return d;
@@ -790,7 +793,7 @@ export default class Grid {
 	}
 
 	set_value(fieldname, value, doc) {
-		if (this.display_status !== "None" && this.grid_rows_by_docname[doc.name]) {
+		if (this.display_status !== "None" && doc?.name && this.grid_rows_by_docname?.[doc.name]) {
 			this.grid_rows_by_docname[doc.name].refresh_field(fieldname, value);
 		}
 	}
@@ -833,7 +836,10 @@ export default class Grid {
 					acc[d.fieldname] = d.default;
 					return acc;
 				}, {});
-				this.df.data.push({ idx: this.df.data.length + 1, __islocal: true, ...defaults });
+
+				const row_idx = this.df.data.length + 1;
+				this.df.data.push({ idx: row_idx, __islocal: true, ...defaults });
+				this.df.on_add_row && this.df.on_add_row(row_idx);
 				this.refresh();
 			}
 
@@ -912,89 +918,6 @@ export default class Grid {
 		}, 100);
 	}
 
-	// setup_visible_columns() {
-	// 	if (this.visible_columns && this.visible_columns.length > 0) return;
-	
-	// 	this.user_defined_columns = [];
-	// 	this.setup_user_defined_columns();
-	// 	var total_colsize = 1,
-	// 		fields =
-	// 			this.user_defined_columns && this.user_defined_columns.length > 0
-	// 				? this.user_defined_columns
-	// 				: this.editable_fields || this.docfields;
-	
-	// 	this.visible_columns = [];
-	
-	// 	for (var ci in fields) {
-	// 		var _df = fields[ci];
-	
-	// 		// get docfield if from fieldname
-	// 		df =
-	// 			this.user_defined_columns && this.user_defined_columns.length > 0
-	// 				? _df
-	// 				: this.fields_map[_df.fieldname];
-	
-	// 		if (
-	// 			df &&
-	// 			!df.hidden &&
-	// 			(this.editable_fields || df.in_list_view) &&
-	// 			((this.frm && this.frm.get_perm(df.permlevel, "read")) || !this.frm) &&
-	// 			!frappe.model.layout_fields.includes(df.fieldtype)
-	// 		) {
-	// 			if (df.columns) {
-	// 				df.colsize = df.columns;
-	// 			} else {
-	// 				this.update_default_colsize(df);
-	// 			}
-	
-	// 			// attach formatter on refresh
-	// 			if (
-	// 				df.fieldtype == "Link" &&
-	// 				!df.formatter &&
-	// 				df.parent &&
-	// 				frappe.meta.docfield_map[df.parent]
-	// 			) {
-	// 				const docfield = frappe.meta.docfield_map[df.parent][df.fieldname];
-	// 				if (docfield && docfield.formatter) {
-	// 					df.formatter = docfield.formatter;
-	// 				}
-	// 			}
-	
-	// 			total_colsize += df.colsize;
-	// 			if (total_colsize > 20) return false; // Increased limit to 20
-	// 			this.visible_columns.push([df, df.colsize]);
-	// 		}
-	// 	}
-	
-	// 	// redistribute if total-col size is less than 12
-	// 	var passes = 0;
-	// 	while (total_colsize < 20 && passes < 20) { // Adjusted loop conditions
-	// 		for (var i in this.visible_columns) {
-	// 			var df = this.visible_columns[i][0];
-	// 			var colsize = this.visible_columns[i][1];
-	// 			if (colsize > 1 && colsize < 20 && frappe.model.is_non_std_field(df.fieldname)) {
-	// 				if (
-	// 					passes < 3 &&
-	// 					["Int", "Currency", "Float", "Check", "Percent"].indexOf(df.fieldtype) !==
-	// 						-1
-	// 				) {
-	// 					// don't increase col size of these fields in first 3 passes
-	// 					continue;
-	// 				}
-	
-	// 				this.visible_columns[i][1] += 1;
-	// 				total_colsize++;
-	// 			}
-	
-	// 			if (total_colsize > 20) break;
-	// 		}
-	// 		passes++;
-	// 	}
-	
-		
-	// }
-	
-
 	setup_visible_columns() {
 		if (this.visible_columns && this.visible_columns.length > 0) return;
 
@@ -1044,7 +967,6 @@ export default class Grid {
 				}
 
 				total_colsize += df.colsize;
-				if (total_colsize > 11) return false;
 				this.visible_columns.push([df, df.colsize]);
 			}
 		}
@@ -1150,7 +1072,7 @@ export default class Grid {
 
 	setup_allow_bulk_edit() {
 		let me = this;
-		if (this.frm && this.frm.get_docfield(this.df.fieldname).allow_bulk_edit) {
+		if (this.frm && this.frm.get_docfield(this.df.fieldname)?.allow_bulk_edit) {
 			// download
 			this.setup_download();
 
@@ -1302,7 +1224,7 @@ export default class Grid {
 		}
 
 		for (let row of this.grid_rows) {
-			let docfield = row.docfields.find((d) => d.fieldname === fieldname);
+			let docfield = row?.docfields?.find((d) => d.fieldname === fieldname);
 			if (docfield) {
 				docfield[property] = value;
 			} else {
