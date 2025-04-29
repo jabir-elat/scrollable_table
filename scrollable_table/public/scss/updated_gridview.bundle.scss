@@ -693,3 +693,20 @@
 		padding-right: 0 !important;
 	}
 }
+
+.fixed-width-column {
+	width: 50px !important;
+	min-width: 50px !important;
+	max-width: 50px !important;
+	flex: 0 0 50px !important;
+}
+
+
+.form-grid {
+	.row-check,
+	.row-index,
+	.col.grid-static-col.pointer,
+	.col.edit-icon {
+		@extend .fixed-width-column;
+	}
+}

@@ -331,7 +331,7 @@ export default class GridRow {
 		if (this.doc && !this.grid.df.in_place_edit) {
 			// remove row
 			if (!this.open_form_button) {
-				this.open_form_button = $('<div class="col"></div>').appendTo(this.row);
+				this.open_form_button = $('<div class="col edit-icon"></div>').appendTo(this.row);
 
 				if (!this.configure_columns) {
 					const edit_msg = __("Edit", "", "Edit grid row");
@@ -716,11 +716,16 @@ export default class GridRow {
 		);
 		let form_grid = current_grid.find(".form-grid");
 		if (form_grid.length) {
-			if (this.grid.visible_columns.length * 100 <= 1225) {
+			// Add CSS classes to maintain fixed widths
+			form_grid.find(".row-check").addClass("fixed-width-column");
+			form_grid.find(".row-index").addClass("fixed-width-column");
+			form_grid.find(".col.grid-static-col.pointer").addClass("fixed-width-column");
+			form_grid.find(".col.edit-icon").addClass("fixed-width-column");
+			if (total_colsize * 50 + 25 <= 1225) {
 				form_grid.css("width", "auto");
 			}
 			else{
-				form_grid.css("width", this.grid.visible_columns.length * 100 + 25 + "px");
+				form_grid.css("width", total_colsize * 50 + 25 + "px");
 			}			
 		}
 		if (total_colsize > 10) {
