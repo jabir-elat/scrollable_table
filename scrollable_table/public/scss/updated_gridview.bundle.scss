@@ -604,56 +604,57 @@
 		display: grid;
 		grid-auto-rows: min-content;
 		.grid-static-col.col-xs-1 {
-			flex: 0 0 60px;
-			max-width: 60px;
+			flex: 0 0 50px;
+			max-width: 50px;
 		}
 		.grid-static-col.col-xs-2 {
-			flex: 0 0 90px;
-			max-width: 90px;
+			flex: 0 0 100px;
+			max-width: 100px;
 		}
 		.grid-static-col.col-xs-3 {
-			flex: 0 0 120px;
-			max-width: 120px;
-		}
-		.grid-static-col.col-xs-4 {
 			flex: 0 0 150px;
 			max-width: 150px;
 		}
-		.grid-static-col.col-xs-5 {
+		.grid-static-col.col-xs-4 {
 			flex: 0 0 200px;
 			max-width: 200px;
 		}
-		.grid-static-col.col-xs-6 {
+		.grid-static-col.col-xs-5 {
 			flex: 0 0 250px;
 			max-width: 250px;
 		}
-		.grid-static-col.col-xs-7 {
+		.grid-static-col.col-xs-6 {
 			flex: 0 0 300px;
 			max-width: 300px;
 		}
-		.grid-static-col.col-xs-8 {
+		.grid-static-col.col-xs-7 {
 			flex: 0 0 350px;
 			max-width: 350px;
 		}
-		.grid-static-col.col-xs-9 {
+		.grid-static-col.col-xs-8 {
 			flex: 0 0 400px;
 			max-width: 400px;
 		}
-		.grid-static-col.col-xs-10 {
+		.grid-static-col.col-xs-9 {
 			flex: 0 0 450px;
 			max-width: 450px;
 		}
-		.grid-static-col.col-xs-11 {
+		.grid-static-col.col-xs-10 {
 			flex: 0 0 500px;
 			max-width: 500px;
 		}
-		.grid-static-col.col-xs-12 {
+		.grid-static-col.col-xs-11 {
 			flex: 0 0 550px;
 			max-width: 550px;
+		}
+		.grid-static-col.col-xs-12 {
+			flex: 0 0 600px;
+			max-width: 600px;
 		}
 		.grid-row > .row .col:last-child,
 		.grid-row > .dialog-assignment-row .col:last-child {
 			min-width: 40px;
+			max-width: 50px;
 		}
 	}
 }

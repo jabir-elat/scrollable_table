@@ -258,7 +258,7 @@ class Custom_Grid extends Grid {
 				}
 
 				total_colsize += df.colsize;
-				if (total_colsize > 100) return false; // Increased limit to 20
+				if (total_colsize > 200) return false; // Increased limit to 20
 				this.visible_columns.push([df, df.colsize]);
 			}
 
