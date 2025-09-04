@@ -1,0 +1,15 @@
+{
+  "name": "scrollable_table",
+  "version": "1.0.0",
+  "description": "Horizontally Scrollable Child Table",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "frappe-quill-image-resize": "^3.0.9"
+  }
+}
