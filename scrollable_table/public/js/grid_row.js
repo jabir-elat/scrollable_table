@@ -748,8 +748,27 @@ export default class GridRow {
 		}
 	}
 
+	refresh_dependency() {
+		// Re-evaluate dependency expressions of visible columns for this row.
+		if (!this.grid) return;
+
+		const fields =
+			this.grid.user_defined_columns && this.grid.user_defined_columns.length > 0
+				? this.grid.user_defined_columns
+				: this.docfields;
+
+		for (const col of this.grid.visible_columns || []) {
+			const df = fields?.find((field) => field?.fieldname === col[0]?.fieldname);
+			this.set_dependant_property(df);
+		}
+
+		// Keep existing rendering logic: just refresh row after dependency updates.
+		this.refresh();
+	}
+
 	set_dependant_property(df) {
 		if (
+			df &&
 			!df.reqd &&
 			df.mandatory_depends_on &&
 			this.evaluate_depends_on_value(df.mandatory_depends_on)
@@ -758,6 +777,7 @@ export default class GridRow {
 		}
 
 		if (
+			df &&
 			!df.read_only &&
 			df.read_only_depends_on &&
 			this.evaluate_depends_on_value(df.read_only_depends_on)
